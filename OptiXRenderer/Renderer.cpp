@@ -63,6 +63,9 @@ void Renderer::initPrograms()
 
     // Integrators
     programs["raytracer"] = createProgram("RayTracer.cu", "closestHit");
+    programs["analyticdirect"] = createProgram("AnalyticDirect.cu", "closestHit");
+    programs["direct"] = createProgram("Direct.cu", "closestHit");
+    programs["pathtracer"] = createProgram("PathTracer.cu", "closestHit");
 
     // Shadow Caster
     programs["shadowCaster"] = createProgram("Common.cu", "anyHit");
@@ -155,6 +158,10 @@ void Renderer::buildScene()
     float fov = tan((scene->fovy / 2) * M_PI / 180.0);
     programs["rayGen"]["fov"]->setFloat(fov);
 
+    programs["rayGen"]["maxdepth"]->setUint(scene->maxdepth);
+    programs["rayGen"]["spp"]->setUint(scene->spp);
+    programs["rayGen"]["NEE"]->setUint(scene->NEE);
+
     // Create buffers and pass them to Optix programs that the buffers
     Buffer triBuffer = createBuffer(scene->triangles);
     programs["triInt"]["triangles"]->set(triBuffer);
@@ -220,6 +227,13 @@ void Renderer::buildScene()
     programs["integrator"]["plights"]->set(plightBuffer);
     Buffer dlightBuffer = createBuffer(scene->dlights);
     programs["integrator"]["dlights"]->set(dlightBuffer);
+    Buffer qlightBuffer = createBuffer(scene->qlights);
+    programs["integrator"]["qlights"]->set(qlightBuffer);
+
+    //set sampling details
+    programs["integrator"]["lightsamples"]->setUint(scene->lightsamples);
+    programs["integrator"]["lightstratify"]->setUint(scene->lightstratify);
+    programs["pathtracer"]["spp"]->setUint(scene->spp);
 
     // Validate everything before running 
     context->validate();

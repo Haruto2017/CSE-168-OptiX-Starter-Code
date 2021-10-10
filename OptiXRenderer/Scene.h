@@ -23,7 +23,7 @@ struct Scene
 
     std::vector<DirectionalLight> dlights;
     std::vector<PointLight> plights;
-    //std::vector<ParallelogramLight> qlights;
+    std::vector<ParallelogramLight> qlights;
 
     // TODO: add other variables that you need here
     optix::float3 eye;
@@ -34,6 +34,7 @@ struct Scene
     unsigned int maxdepth;
 
     unsigned int spp;
+    unsigned int NEE;
 
     Scene()
     {
@@ -43,5 +44,6 @@ struct Scene
         lightsamples = 1;
         lightstratify = 0;
         spp = 1;
+        NEE = 0;
     }
 };

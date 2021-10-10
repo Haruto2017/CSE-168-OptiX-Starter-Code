@@ -10,32 +10,62 @@
 struct Triangle
 {
     // TODO: define the triangle structure
-    unsigned int vertice0;
-    unsigned int vertice1;
-    unsigned int vertice2;
+    optix::float3 vertice0;
+    optix::float3 vertice1;
+    optix::float3 vertice2;
     optix::float3 normal;
 
-    Triangle(unsigned int v0, unsigned int v1, unsigned int v2, optix::float3 n)
+    optix::float3 ambient;
+    optix::float3 diffuse;
+    optix::float3 emission;
+    optix::float3 specular;
+    float shininess;
+
+    Triangle(optix::float3 v0, optix::float3 v1, optix::float3 v2, optix::float3 a, optix::float3 d, optix::float3 e, optix::float3 s, float shininess)
     {
         vertice0 = v0;
         vertice1 = v1;
         vertice2 = v2;
-        normal = n;
+        normal = optix::normalize(optix::cross(vertice1 - vertice0, vertice2 - vertice0));
+
+        ambient = a;
+        diffuse = d;
+        emission = e;
+        specular = s;
+        this->shininess = shininess;
     }
 };
 
 struct Sphere
 {
+    optix::float3 center;
+    float radius;
 
+    optix::float3 ambient;
+    optix::float3 diffuse;
+    optix::float3 emission;
+    optix::float3 specular;
+    float shininess;
 
-    // TODO: define the sphere structure
+    Sphere(optix::float3 c, float r, optix::float3 a, optix::float3 d, optix::float3 e, optix::float3 s, float shininess)
+    {
+        center = c;
+        radius = r;
 
-
+        ambient = a;
+        diffuse = d;
+        emission = e;
+        specular = s;
+        this->shininess = shininess;
+    }
 };
 
 struct Attributes
 {
-    
-
     // TODO: define the attributes structure
+    optix::float3 ambient;
+    optix::float3 diffuse;
+    optix::float3 emission;
+    optix::float3 specular;
+    float shininess;
 };

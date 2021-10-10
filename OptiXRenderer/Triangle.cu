@@ -11,26 +11,27 @@ rtDeclareVariable(Ray, ray, rtCurrentRay, );
 
 // Attributes to be passed to material programs 
 rtDeclareVariable(Attributes, attrib, attribute attrib, );
+rtDeclareVariable(float3, intersection, attribute Intersection, );
+rtDeclareVariable(float3, normal, attribute Normal, );
+rtDeclareVariable(float3, view, attribute View, );
+rtDeclareVariable(float, area, attribute Area, );
 
 RT_PROGRAM void intersect(int primIndex)
 {
     // Find the intersection of the current ray and triangle
     Triangle tri = triangles[primIndex];
-    float3 v0 = vertices[tri.vertice0];
-    float3 v1 = vertices[tri.vertice1];
-    float3 v2 = vertices[tri.vertice2];
     float t;
     //if(primIndex > 800)
         //rtPrintf("i: %d\n", primIndex);
     // TODO: implement triangle intersection test here
     float u;
     float v;
-    float3 v0v1 = v1 - v0;
-    float3 v0v2 = v2 - v0;
+    float3 v0v1 = tri.vertice1 - tri.vertice0;
+    float3 v0v2 = tri.vertice2 - tri.vertice0;
     float3 pvec = cross(ray.direction, v0v2);
     float det = dot(v0v1, pvec);
     // Backface Culling
-    float epsilon = 0.0001f;
+    float epsilon = 0.001f;
     if (det < epsilon)
     {
         t = -1;
@@ -38,7 +39,7 @@ RT_PROGRAM void intersect(int primIndex)
     else
     {
         float invDet = 1 / det;
-        float3 tvec = ray.origin - v0;
+        float3 tvec = ray.origin - tri.vertice0;
         u = dot(tvec, pvec) * invDet;
         if (u < 0 || u > 1)
         {
@@ -65,6 +66,16 @@ RT_PROGRAM void intersect(int primIndex)
         // Pass attributes
 
         // TODO: assign attribute variables here
+        attrib.ambient = tri.ambient;
+        attrib.emission = tri.emission;
+        attrib.diffuse = tri.diffuse;
+        attrib.specular = tri.specular;
+        attrib.shininess = tri.shininess;
+
+        intersection = ray.origin + t * ray.direction;
+        normal = tri.normal;
+        view = ray.direction;
+        area = length(cross(v0v1, v0v2)) / 2;
 
         rtReportIntersection(0);
     }

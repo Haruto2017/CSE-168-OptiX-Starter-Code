@@ -9,11 +9,19 @@
 
 struct Triangle
 {
-    
-
     // TODO: define the triangle structure
+    unsigned int vertice0;
+    unsigned int vertice1;
+    unsigned int vertice2;
+    optix::float3 normal;
 
-
+    Triangle(unsigned int v0, unsigned int v1, unsigned int v2, optix::float3 n)
+    {
+        vertice0 = v0;
+        vertice1 = v1;
+        vertice2 = v2;
+        normal = n;
+    }
 };
 
 struct Sphere

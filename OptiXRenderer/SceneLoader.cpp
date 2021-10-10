@@ -77,7 +77,35 @@ std::shared_ptr<Scene> SceneLoader::load(std::string sceneFilename)
         {
             scene->outputFilename = svalues[0];
         }
-        // TODO: use the examples above to handle other commands
+        else if (cmd == "camera" && readValues(s, 10, fvalues))
+        {
+            scene->eye.x = fvalues[0];
+            scene->eye.y = fvalues[1];
+            scene->eye.z = fvalues[2];
+            scene->center.x = fvalues[3];
+            scene->center.y = fvalues[4];
+            scene->center.z = fvalues[5];
+            scene->up.x = fvalues[6];
+            scene->up.y = fvalues[7];
+            scene->up.z = fvalues[8];
+            scene->fovy = (unsigned int)fvalues[9];
+        }
+        else if (cmd == "maxverts" && readValues(s, 1, fvalues))
+        {
+            scene->maxverts = (unsigned int)fvalues[0];
+        }
+        else if (cmd == "vertex" && readValues(s, 3, fvalues))
+        {
+            scene->vertices.push_back(optix::make_float3(fvalues[0], fvalues[1], fvalues[2]));
+        }
+        else if (cmd == "tri" && readValues(s, 3, fvalues))
+        {
+            optix::float3 v0 = scene->vertices[(unsigned int)fvalues[0]];
+            optix::float3 v1 = scene->vertices[(unsigned int)fvalues[1]];
+            optix::float3 v2 = scene->vertices[(unsigned int)fvalues[2]];
+            optix::float3 n = optix::normalize(optix::cross(v1 - v0, v2 - v0));
+            scene->triangles.push_back(Triangle((unsigned int)fvalues[0], (unsigned int)fvalues[1], (unsigned int)fvalues[2], n));
+        }
     }
 
     in.close();

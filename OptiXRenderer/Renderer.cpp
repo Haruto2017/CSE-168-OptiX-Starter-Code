@@ -127,6 +127,11 @@ void Renderer::buildScene()
     currentFrame = 0;
     numFrames = 1;
 
+    printf("size: %d \n", scene->triangles.size());
+    //for (int i = 0; i < scene->vertices.size(); ++i)
+    //{
+    //    printf("%f %f %f \n", scene->vertices[i].x, scene->vertices[i].y, scene->vertices[i].z);
+    //}
     // Set width and height
     resultBuffer->setSize(width, height);
     programs["rayGen"]["resultBuffer"]->set(resultBuffer);
@@ -140,11 +145,24 @@ void Renderer::buildScene()
     material->setAnyHitProgram(1, programs["shadowCaster"]);
 
     // TODO: pass data to programs here
+    
+    //Set camera values
+    programs["rayGen"]["width"]->setUint(width);
+    programs["rayGen"]["height"]->setUint(height);
+    programs["rayGen"]["eye"]->setFloat(scene->eye);
+    programs["rayGen"]["center"]->setFloat(scene->center);
+    programs["rayGen"]["up"]->setFloat(scene->up);
+    float fov = tan((scene->fovy / 2) * M_PI / 180.0);
+    programs["rayGen"]["fov"]->setFloat(fov);
 
     // Create buffers and pass them to Optix programs that the buffers
     Buffer triBuffer = createBuffer(scene->triangles);
     programs["triInt"]["triangles"]->set(triBuffer);
     programs["triBound"]["triangles"]->set(triBuffer);
+
+    Buffer verBuffer = createBuffer(scene->vertices);
+    programs["triInt"]["vertices"]->set(verBuffer);
+    programs["triBound"]["vertices"]->set(verBuffer);
 
     Buffer sphereBuffer = createBuffer(scene->spheres);
     programs["sphereInt"]["spheres"]->set(sphereBuffer);

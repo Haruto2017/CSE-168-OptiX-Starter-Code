@@ -18,6 +18,7 @@ struct Payload
     float3 origin;
     float3 dir;
     float3 pathTracingWeight;
+    unsigned int first;
 };
 
 struct ShadowPayload

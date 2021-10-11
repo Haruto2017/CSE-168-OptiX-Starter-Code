@@ -36,7 +36,7 @@ RT_PROGRAM void closestHit()
     //return the radiance if reach a light source
     if (abs(attrib.emission.x - 0.0) > epsilon || abs(attrib.emission.y - 0.0) > epsilon || abs(attrib.emission.z - 0.0) > epsilon)
     {
-        if (payload.NEE == 0)
+        if (payload.NEE == 0 || payload.first == 1)
         {
             payload.radiance += (attrib.emission / area) * payload.pathTracingWeight;
         }

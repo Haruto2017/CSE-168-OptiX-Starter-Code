@@ -37,12 +37,12 @@ RT_PROGRAM void generateRays()
     //rtPrintf("any\n");
 
     // TODO: calculate the ray direction (change the following lines)
-    float3 origin = eye; 
     float aspect_ratio = (float)width / (float)height;
 
     float3 sum = make_float3(0);
     for (int i = 0; i < spp; ++i)
     {
+        float3 origin = eye;
         size_t2 resultSize = resultBuffer.size();
         uint seed = tea<16>(launchIndex.x * resultSize.y + launchIndex.y, i);
         float3 camera_coord;
@@ -71,6 +71,7 @@ RT_PROGRAM void generateRays()
         // Shoot a ray to compute the color of the current pixel
         Payload payload;
         payload.done = false;
+        payload.first = true;
         if (NEE == 1)
         {
             payload.NEE = 1;
@@ -87,18 +88,21 @@ RT_PROGRAM void generateRays()
         payload.radiance = make_float3(0);
         while (!payload.done && payload.depth > 0)
         {
-            payload.seed = tea<16>((unsigned int)(rnd(seed) * 100000), payload.depth);
+            payload.seed = tea<16>(i * resultSize.x * resultSize.y + launchIndex.x * resultSize.y + launchIndex.y, payload.depth);
             Ray ray = make_Ray(origin, dir, 0, epsilon, RT_DEFAULT_MAX);
+            //rtPrintf("any\n");
             rtTrace(root, ray, payload);
+            payload.first = 0;
             sum += payload.radiance;
             origin = payload.origin;
             dir = payload.dir;
             payload.depth--;
         }
+        //rtPrintf("%d \n", i);
     }
-    //rtPrintf("%f %f %f \n", sum.x, sum.y, sum.z);
     //rtPrintf("any\n");
-    result = clamp(sum / spp, make_float3(0), make_float3(1));
+    result = sum/spp;
+    //rtPrintf("%f %f %f \n", result.x, result.y, result.z);
     // Write the result
     resultBuffer[launchIndex] = result;
 }

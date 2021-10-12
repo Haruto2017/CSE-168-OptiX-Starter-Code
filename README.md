@@ -1,9 +1,9 @@
 # Optix-Based-Path-Tracer
 
-A Path Tracer built with Nvidia Optix. The Optix Skeleton is provided by [CSE168 at UCSD][https://github.com/CSE168sp20/CSE-168-OptiX-Starter-Code]. The installation guidelines can be found in the INSTALL-WIN.txt. The required version of is 6.5 for Optix and 10.1 for Cuda. 
+A Path Tracer built with Nvidia Optix. The installation guidelines can be found in the INSTALL-WIN.txt. The required version of is 6.5 for Optix and 10.1 for Cuda. 
 In this renderer, the following functionalities are implemented and more are coming. Examples are shown below and can be found in images file.
 
-##List of Implementation
+##List of My Implementation
 1. Geometry and Light Representation
 2. Ray-Geometry Intersection Checking for Triangles (Moller Trumbore Algorithm) and Spheres
 3. Ray Generation with Camera Ray Calculation
@@ -36,3 +36,5 @@ In this renderer, the following functionalities are implemented and more are com
 ![](images/cornellBRDF.png)
 7. Cornell Box with Monte Carlo Path Tracing and GGX BRDF Importance Sampling
 ![](images/ggx.png)
+
+The Optix Skeleton is provided by [CSE168 at UCSD][https://github.com/CSE168sp20/CSE-168-OptiX-Starter-Code].

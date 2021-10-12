@@ -54,6 +54,8 @@ std::shared_ptr<Scene> SceneLoader::load(std::string sceneFilename)
     optix::float3 emission = optix::make_float3(0, 0, 0);
     optix::float3 specular = optix::make_float3(0, 0, 0);
     float shininess = 1.0;
+    float roughness = 1.0;
+    unsigned int brdf = 1;
 
     optix::float3 attenuation = optix::make_float3(1, 0, 0);
 
@@ -111,11 +113,11 @@ std::shared_ptr<Scene> SceneLoader::load(std::string sceneFilename)
         else if (cmd == "tri" && readValues(s, 3, fvalues))
         {
             scene->triangles.push_back(Triangle(transformPoint(scene->vertices[(unsigned int)fvalues[0]]), 
-                transformPoint(scene->vertices[(unsigned int)fvalues[1]]), transformPoint(scene->vertices[(unsigned int)fvalues[2]]), ambient, diffuse, emission, specular, shininess));
+                transformPoint(scene->vertices[(unsigned int)fvalues[1]]), transformPoint(scene->vertices[(unsigned int)fvalues[2]]), ambient, diffuse, emission, specular, shininess, roughness, brdf));
         }
         else if (cmd == "sphere" && readValues(s, 4, fvalues))
         {
-            scene->spheres.push_back(Sphere(transformPoint(optix::make_float3(fvalues[0], fvalues[1], fvalues[2])), fvalues[3] * sphere_scale.top(), ambient, diffuse, emission, specular, shininess));
+            scene->spheres.push_back(Sphere(transformPoint(optix::make_float3(fvalues[0], fvalues[1], fvalues[2])), fvalues[3] * sphere_scale.top(), ambient, diffuse, emission, specular, shininess, roughness, brdf));
         }
         else if (cmd == "pushTransform")
         {
@@ -196,8 +198,8 @@ std::shared_ptr<Scene> SceneLoader::load(std::string sceneFilename)
             optix::float3 t_emission = intensity / 2;
             optix::float3 t_specular = optix::make_float3(0, 0, 0);;
             float t_shininess = 1.0;
-            scene->triangles.push_back(Triangle(a, a + ab + ac, a + ab, t_ambient, t_diffuse, t_emission, t_specular, t_shininess));
-            scene->triangles.push_back(Triangle(a, a + ac, a + ab + ac, t_ambient, t_diffuse, t_emission, t_specular, t_shininess));
+            scene->triangles.push_back(Triangle(a, a + ab + ac, a + ab, t_ambient, t_diffuse, t_emission, t_specular, t_shininess, 1.0, 1));
+            scene->triangles.push_back(Triangle(a, a + ac, a + ab + ac, t_ambient, t_diffuse, t_emission, t_specular, t_shininess, 1.0, 1));
         }
         else if (cmd == "lightsamples" && readValues(s, 1, fvalues))
         {
@@ -214,6 +216,30 @@ std::shared_ptr<Scene> SceneLoader::load(std::string sceneFilename)
         else if (cmd == "nexteventestimation" && readValues(s, 1, svalues))
         {
             scene->NEE = svalues[0].compare("on") ? 0 : 1;
+        }
+        else if (cmd == "russianroulette" && readValues(s, 1, svalues))
+        {
+            scene->RR = svalues[0].compare("on") ? 0 : 1;
+        }
+        else if (cmd == "importancesampling" && readValues(s, 1, svalues))
+        {
+            unsigned int temp = 0;
+            temp += svalues[0].compare("hemisphere") ? 0 : 1;
+            temp += svalues[0].compare("cosine") ? 0 : 2;
+            temp += svalues[0].compare("brdf") ? 0 : 3;
+            scene->IS = temp;
+        }
+        else if (cmd == "brdf" && readValues(s, 1, svalues))
+        {
+            brdf = svalues[0].compare("phong") ? 0 : 1;
+        }
+        else if (cmd == "roughness" && readValues(s, 1, fvalues))
+        {
+            roughness = fvalues[0];
+        }
+        else if (cmd == "gamma" && readValues(s, 1, fvalues))
+        {
+            scene->gamma = fvalues[0];
         }
     }
 

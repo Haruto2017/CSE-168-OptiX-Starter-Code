@@ -4,6 +4,7 @@ integrator pathtracer
 spp 64
 nexteventestimation on
 russianroulette on
+# importancesampling cosine
 camera 0 1 3 0 1 0 0 1 0 45
 output cornellRR.png
 

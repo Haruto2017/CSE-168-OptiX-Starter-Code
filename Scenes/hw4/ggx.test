@@ -1,14 +1,16 @@
 size 1280 280
 integrator pathtracer
+lightsamples 1
+lightstratify off
 spp 64
 gamma 2.2
 importancesampling brdf
 nexteventestimation on
-russianroulette on
+russianroulette off
 camera  0 2 15  0 -3 2.5  0 1 0  13
 output ggx.png
 
-maxdepth -1
+maxdepth 3
 
 
 maxverts 8

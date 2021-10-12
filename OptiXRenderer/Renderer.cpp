@@ -161,6 +161,9 @@ void Renderer::buildScene()
     programs["rayGen"]["maxdepth"]->setUint(scene->maxdepth);
     programs["rayGen"]["spp"]->setUint(scene->spp);
     programs["rayGen"]["NEE"]->setUint(scene->NEE);
+    programs["rayGen"]["RR"]->setUint(scene->RR);
+
+    programs["rayGen"]["gamma"]->setFloat(scene->gamma);
 
     // Create buffers and pass them to Optix programs that the buffers
     Buffer triBuffer = createBuffer(scene->triangles);
@@ -233,7 +236,7 @@ void Renderer::buildScene()
     //set sampling details
     programs["integrator"]["lightsamples"]->setUint(scene->lightsamples);
     programs["integrator"]["lightstratify"]->setUint(scene->lightstratify);
-    programs["pathtracer"]["spp"]->setUint(scene->spp);
+    programs["pathtracer"]["importancesampling"]->setUint(scene->IS);
 
     // Validate everything before running 
     context->validate();

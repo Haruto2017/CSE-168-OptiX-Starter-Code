@@ -35,6 +35,11 @@ struct Scene
 
     unsigned int spp;
     unsigned int NEE;
+    unsigned int RR;
+
+    unsigned int IS;
+    
+    float gamma;
 
     Scene()
     {
@@ -45,5 +50,7 @@ struct Scene
         lightstratify = 0;
         spp = 1;
         NEE = 0;
+        IS = 1;
+        gamma = 1.0;
     }
 };

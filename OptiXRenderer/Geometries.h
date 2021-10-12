@@ -20,8 +20,10 @@ struct Triangle
     optix::float3 emission;
     optix::float3 specular;
     float shininess;
+    float roughness;
+    unsigned int brdf;
 
-    Triangle(optix::float3 v0, optix::float3 v1, optix::float3 v2, optix::float3 a, optix::float3 d, optix::float3 e, optix::float3 s, float shininess)
+    Triangle(optix::float3 v0, optix::float3 v1, optix::float3 v2, optix::float3 a, optix::float3 d, optix::float3 e, optix::float3 s, float shininess, float roughness, unsigned int brdf)
     {
         vertice0 = v0;
         vertice1 = v1;
@@ -33,6 +35,8 @@ struct Triangle
         emission = e;
         specular = s;
         this->shininess = shininess;
+        this->roughness = roughness;
+        this->brdf = brdf;
     }
 };
 
@@ -46,8 +50,10 @@ struct Sphere
     optix::float3 emission;
     optix::float3 specular;
     float shininess;
+    float roughness;
+    unsigned int brdf;
 
-    Sphere(optix::float3 c, float r, optix::float3 a, optix::float3 d, optix::float3 e, optix::float3 s, float shininess)
+    Sphere(optix::float3 c, float r, optix::float3 a, optix::float3 d, optix::float3 e, optix::float3 s, float shininess, float roughness, unsigned int brdf)
     {
         center = c;
         radius = r;
@@ -57,6 +63,8 @@ struct Sphere
         emission = e;
         specular = s;
         this->shininess = shininess;
+        this->roughness = roughness;
+        this->brdf = brdf;
     }
 };
 
@@ -68,4 +76,6 @@ struct Attributes
     optix::float3 emission;
     optix::float3 specular;
     float shininess;
+    float roughness;
+    float brdf;
 };

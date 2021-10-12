@@ -61,6 +61,8 @@ RT_PROGRAM void intersect(int primIndex)
         attrib.diffuse = sphere.diffuse;
         attrib.specular = sphere.specular;
         attrib.shininess = sphere.shininess;
+        attrib.roughness = sphere.roughness;
+        attrib.brdf = sphere.brdf;
 
         intersection = ray.origin + t * ray.direction;
         normal = normalize(intersection - sphere.center);

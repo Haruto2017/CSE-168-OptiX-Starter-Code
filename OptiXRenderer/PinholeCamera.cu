@@ -29,6 +29,8 @@ rtDeclareVariable(float, fov, , );
 rtDeclareVariable(uint, spp, , );
 rtDeclareVariable(uint, maxdepth, , );
 rtDeclareVariable(uint, NEE, , );
+rtDeclareVariable(uint, RR, , );
+rtDeclareVariable(float, gamma, , );
 
 RT_PROGRAM void generateRays()
 {
@@ -71,7 +73,7 @@ RT_PROGRAM void generateRays()
         // Shoot a ray to compute the color of the current pixel
         Payload payload;
         payload.done = false;
-        payload.first = true;
+        payload.first = 1;
         if (NEE == 1)
         {
             payload.NEE = 1;
@@ -82,27 +84,26 @@ RT_PROGRAM void generateRays()
             payload.NEE = 0;
             payload.depth = maxdepth;
         }
+        payload.RR = RR;
         payload.origin = origin;
         payload.dir = dir;
         payload.pathTracingWeight = make_float3(1.0);
         payload.radiance = make_float3(0);
-        while (!payload.done && payload.depth > 0)
+        while (!payload.done && (payload.depth > 0 || RR))
         {
-            payload.seed = tea<16>(i * resultSize.x * resultSize.y + launchIndex.x * resultSize.y + launchIndex.y, payload.depth);
+            payload.seed = tea<16>(i * resultSize.x * resultSize.y + launchIndex.x * resultSize.y + launchIndex.y, i * maxdepth + payload.depth);
             Ray ray = make_Ray(origin, dir, 0, epsilon, RT_DEFAULT_MAX);
-            //rtPrintf("any\n");
             rtTrace(root, ray, payload);
             payload.first = 0;
-            sum += payload.radiance;
             origin = payload.origin;
             dir = payload.dir;
             payload.depth--;
         }
-        //rtPrintf("%d \n", i);
+        sum += payload.radiance;
+        //rtPrintf("%d\n", payload.depth);
     }
-    //rtPrintf("any\n");
     result = sum/spp;
-    //rtPrintf("%f %f %f \n", result.x, result.y, result.z);
+    result = make_float3(pow(result.x, (float)(1 / gamma)), pow(result.y, (float)(1 / gamma)), pow(result.z, (float)(1 / gamma)));
     // Write the result
     resultBuffer[launchIndex] = result;
 }

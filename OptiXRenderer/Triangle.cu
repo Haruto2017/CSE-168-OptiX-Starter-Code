@@ -71,6 +71,8 @@ RT_PROGRAM void intersect(int primIndex)
         attrib.diffuse = tri.diffuse;
         attrib.specular = tri.specular;
         attrib.shininess = tri.shininess;
+        attrib.roughness = tri.roughness;
+        attrib.brdf = tri.brdf;
 
         intersection = ray.origin + t * ray.direction;
         normal = tri.normal;

@@ -1,7 +1,7 @@
 # Optix-Based-Path-Tracer
 
 A Path Tracer built with Nvidia Optix. The Optix Skeleton is provided by [CSE168 at UCSD][https://github.com/CSE168sp20/CSE-168-OptiX-Starter-Code]. 
-In this renderer, the following functionalities are implemented and more are coming.
+In this renderer, the following functionalities are implemented and more are coming. Examples are shown below and can be found in images file.
 
 ##List of Implementation
 1. Geometry and Light Representation
@@ -18,3 +18,21 @@ In this renderer, the following functionalities are implemented and more are com
 ##Planned Fuctionalities
 1. Linearly Transformed Cosine
 2. Temporal and Bilateral Filtering
+
+##Example
+1. Analytic Solved Direct Light with One Light Source
+![](images/analytic.png)
+2. Cornell Box with Monte Carlo Integrated Direct Light
+
+![](images/cornell.png)
+
+3. Cornell Box with Monte Carlo Path Traced Indirect Light and Next Event Estimator
+![](images/cornellNEE.png)
+4. Cornell Box with Monte Carlo Path Traced Indirect Light, NEE, and Russian Roulette
+![](images/cornellRR.png)
+5. Cornell Box with Monte Carlo Path Tracing and Cosine Importance Sampling
+![](images/cornellCosine.png)
+6. Cornell Box with Monte Carlo Path Tracing and BRDF Importance Sampling
+![](images/cornellBRDF.png)
+7. Cornell Box with Monte Carlo Path Tracing and GGX BRDF Importance Sampling
+![](images/ggx.png)
